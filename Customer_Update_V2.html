@@ -595,11 +595,22 @@ let customersData = [];
 		const openEditorFromDropdown = document.getElementById('openEditorFromDropdown');
 		const logoutFromDropdown = document.getElementById('logoutFromDropdown');
 
-		async function sha256(message) {
-			const msgBuffer = new TextEncoder().encode(message);
-			const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-			const hashArray = Array.from(new Uint8Array(hashBuffer));
-			return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+		function sha256(message) {
+			return new Promise((resolve, reject) => {
+				try {
+					const msgBuffer = new TextEncoder().encode(message);
+					crypto.subtle.digest('SHA-256', msgBuffer).then(hashBuffer => {
+						const hashArray = Array.from(new Uint8Array(hashBuffer));
+						resolve(hashArray.map(b => b.toString(16).padStart(2, '0')).join(''));
+					}).catch(err => {
+						console.error('SHA-256 error:', err);
+						resolve('');
+					});
+				} catch(e) {
+					console.error('SHA-256 error:', e);
+					resolve('');
+				}
+			});
 		}
 
 		addEditBtn.addEventListener('click', () => {
@@ -802,20 +813,6 @@ let customersData = [];
 
 		exportBtn.addEventListener('click', () => { exportCompleteHTML(); });
 		cancelEditBtn.addEventListener('click', () => { if (originalCustomersData) customersData = JSON.parse(JSON.stringify(originalCustomersData)); disableEditMode(); renderCustomers(customersData); });
-
-		const iconMap = [
-			{ bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
-			{ bg: 'bg-purple-100', icon: 'fa-building', color: 'text-purple-600' },
-			{ bg: 'bg-emerald-100', icon: 'fa-briefcase', color: 'text-emerald-600' },
-			{ bg: 'bg-orange-100', icon: 'fa-rocket', color: 'text-orange-600' },
-			{ bg: 'bg-pink-100', icon: 'fa-star', color: 'text-pink-600' },
-			{ bg: 'bg-cyan-100', icon: 'fa-globe', color: 'text-cyan-600' },
-			{ bg: 'bg-indigo-100', icon: 'fa-chart-line', color: 'text-indigo-600' },
-			{ bg: 'bg-teal-100', icon: 'fa-shield-halved', color: 'text-teal-600' },
-			{ bg: 'bg-amber-100', icon: 'fa-handshake', color: 'text-amber-600' },
-			{ bg: 'bg-rose-100', icon: 'fa-gear', color: 'text-rose-600' },
-			{ bg: 'bg-violet-100', icon: 'fa-bolt', color: 'text-violet-600' }
-		];
 
 		function renderCustomers(filteredCustomers) {
 			customerList.innerHTML = '';
