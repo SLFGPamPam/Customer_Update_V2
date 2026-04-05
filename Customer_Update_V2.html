@@ -520,11 +520,15 @@ const EDITORS_DATA = [
 	}
 ];
 
-let customersData = [];
+		let customersData = [];
 	let editorsData = [];
 	let isLoggedIn = false;
 	let isEditMode = false;
 	let originalCustomersData = null;
+
+	// Clear login session on page load
+	localStorage.removeItem('isLoggedIn');
+	localStorage.removeItem('loggedInUser');
 
 	// Icon map for customer cards - moved up to prevent TDZ error
 	const iconMap = [
@@ -652,6 +656,8 @@ let customersData = [];
 				document.getElementById('loggedInUser').textContent = user;
 				userBadge.classList.remove('hidden');
 				userBadge.classList.add('flex');
+				localStorage.setItem('isLoggedIn', 'true');
+				localStorage.setItem('loggedInUser', user);
 			} else {
 				loginError.textContent = 'Invalid username or password.';
 				loginError.classList.remove('hidden');
@@ -843,6 +849,31 @@ let customersData = [];
 				editorsDataStr
 			);
 			
+			updatedHTML = updatedHTML.replace(
+				/<div id="userBadge" class="[^"]*">/,
+				'<div id="userBadge" class="hidden relative">'
+			);
+			
+			updatedHTML = updatedHTML.replace(
+				/<div id="editModeIndicator" class="edit-mode-indicator active">/,
+				'<div id="editModeIndicator" class="edit-mode-indicator">'
+			);
+			
+			updatedHTML = updatedHTML.replace(
+				/<div id="editBar" class="[^"]*">/,
+				'<div id="editBar" class="fixed bottom-20 right-6 z-50">'
+			);
+			
+			updatedHTML = updatedHTML.replace(
+				/<div id="saveBar" class="[^"]*">/,
+				'<div id="saveBar">'
+			);
+			
+			updatedHTML = updatedHTML.replace(
+				/<button id="addCustomerBtn" class="[^"]*">/,
+				'<button id="addCustomerBtn" class="px-4 py-2 rounded-lg font-medium text-sm" style="background: var(--btn-bg); color: var(--btn-text);">'
+			);
+			
 			const blob = new Blob([updatedHTML], { type: 'text/html' });
 			const a = document.createElement('a'); 
 			a.href = URL.createObjectURL(blob); 
@@ -926,7 +957,7 @@ let customersData = [];
 		}
 
 		function applyTheme(theme) { document.body.className = document.body.className.replace(/theme-\w+/, 'theme-' + theme); localStorage.setItem('selectedTheme', theme); themeDropdown.value = theme; }
-		const savedTheme = localStorage.getItem('selectedTheme') || 'verdant';
+		const savedTheme = localStorage.getItem('selectedTheme') || 'midnight';
 		applyTheme(savedTheme);
 		themeDropdown.addEventListener('change', (e) => { applyTheme(e.target.value); });
 
