@@ -353,18 +353,19 @@
 		let isEditMode = false;
 		let originalCustomersData = null;
 
-		try {
-			if (typeof CUSTOMER_DATA !== 'undefined') { customersData = CUSTOMER_DATA.customers || []; }
-			if (typeof EDITORS_DATA !== 'undefined') { editorsData = EDITORS_DATA; }
-		} catch(e) { console.error('Error loading data:', e); }
-		loadingState.classList.add('hidden');
-		if (customersData.length > 0) { renderCustomers(customersData); }
-		else { console.warn('No customer data loaded. CUSTOMER_DATA is:', typeof CUSTOMER_DATA); }
+		   try {
+			   if (typeof CUSTOMER_DATA !== 'undefined') { customersData = CUSTOMER_DATA.customers || []; }
+			   if (typeof EDITORS_DATA !== 'undefined') { editorsData = EDITORS_DATA; }
+		   } catch(e) { console.error('Error loading data:', e); }
+		   // Do not call renderCustomers here; wait until after DOM elements are initialized.
+		   if (customersData.length === 0) { console.warn('No customer data loaded. CUSTOMER_DATA is:', typeof CUSTOMER_DATA); }
 
 		const searchBar = document.getElementById('searchBar');
 		const customerList = document.getElementById('customerList');
 		const noResults = document.getElementById('noResults');
 		const loadingState = document.getElementById('loadingState');
+		loadingState.classList.add('hidden');
+		// Do not call renderCustomers here; wait until after iconMap is defined.
 		const themeDropdown = document.getElementById('themeDropdown');
 		const addEditBtn = document.getElementById('addEditBtn');
 		const addCustomerBtn = document.getElementById('addCustomerBtn');
@@ -411,7 +412,7 @@
 		if (typeof CUSTOMER_DATA !== 'undefined') { customersData = CUSTOMER_DATA.customers || []; }
 		if (typeof EDITORS_DATA !== 'undefined') { editorsData = EDITORS_DATA; }
 		loadingState.classList.add('hidden');
-		if (customersData.length > 0) renderCustomers(customersData);
+		// Do not call renderCustomers here; wait until after iconMap is defined.
 
 		addEditBtn.addEventListener('click', () => {
 			if (!isLoggedIn) {
@@ -575,19 +576,21 @@
 
 		cancelEditBtn.addEventListener('click', () => { if (originalCustomersData) customersData = JSON.parse(JSON.stringify(originalCustomersData)); disableEditMode(); renderCustomers(customersData); });
 
-		const iconMap = [
-			{ bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
-			{ bg: 'bg-purple-100', icon: 'fa-building', color: 'text-purple-600' },
-			{ bg: 'bg-emerald-100', icon: 'fa-briefcase', color: 'text-emerald-600' },
-			{ bg: 'bg-orange-100', icon: 'fa-rocket', color: 'text-orange-600' },
-			{ bg: 'bg-pink-100', icon: 'fa-star', color: 'text-pink-600' },
-			{ bg: 'bg-cyan-100', icon: 'fa-globe', color: 'text-cyan-600' },
-			{ bg: 'bg-indigo-100', icon: 'fa-chart-line', color: 'text-indigo-600' },
-			{ bg: 'bg-teal-100', icon: 'fa-shield-halved', color: 'text-teal-600' },
-			{ bg: 'bg-amber-100', icon: 'fa-handshake', color: 'text-amber-600' },
-			{ bg: 'bg-rose-100', icon: 'fa-gear', color: 'text-rose-600' },
-			{ bg: 'bg-violet-100', icon: 'fa-bolt', color: 'text-violet-600' }
-		];
+		   const iconMap = [
+			   { bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
+			   { bg: 'bg-purple-100', icon: 'fa-building', color: 'text-purple-600' },
+			   { bg: 'bg-emerald-100', icon: 'fa-briefcase', color: 'text-emerald-600' },
+			   { bg: 'bg-orange-100', icon: 'fa-rocket', color: 'text-orange-600' },
+			   { bg: 'bg-pink-100', icon: 'fa-star', color: 'text-pink-600' },
+			   { bg: 'bg-cyan-100', icon: 'fa-globe', color: 'text-cyan-600' },
+			   { bg: 'bg-indigo-100', icon: 'fa-chart-line', color: 'text-indigo-600' },
+			   { bg: 'bg-teal-100', icon: 'fa-shield-halved', color: 'text-teal-600' },
+			   { bg: 'bg-amber-100', icon: 'fa-handshake', color: 'text-amber-600' },
+			   { bg: 'bg-rose-100', icon: 'fa-gear', color: 'text-rose-600' },
+			   { bg: 'bg-violet-100', icon: 'fa-bolt', color: 'text-violet-600' }
+		   ];
+		   // Now safe to call renderCustomers
+		   if (customersData.length > 0) renderCustomers(customersData);
 
 		function renderCustomers(filteredCustomers) {
 			customerList.innerHTML = '';
