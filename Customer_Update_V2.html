@@ -509,6 +509,10 @@ const EDITORS_DATA = [
 	{
 		"username": "P4MP4M",
 		"password": "f7806afa0e3d574213f00e9e9f9f7028ba5aeea5b57605509369c695b3c4ddea"
+	},
+	{
+		"username": "praveen",
+		"password": "praveen"
 	}
 ];
 
@@ -595,22 +599,22 @@ let customersData = [];
 		const openEditorFromDropdown = document.getElementById('openEditorFromDropdown');
 		const logoutFromDropdown = document.getElementById('logoutFromDropdown');
 
-		function sha256(message) {
-			return new Promise((resolve, reject) => {
-				try {
-					const msgBuffer = new TextEncoder().encode(message);
-					crypto.subtle.digest('SHA-256', msgBuffer).then(hashBuffer => {
-						const hashArray = Array.from(new Uint8Array(hashBuffer));
-						resolve(hashArray.map(b => b.toString(16).padStart(2, '0')).join(''));
-					}).catch(err => {
-						console.error('SHA-256 error:', err);
-						resolve('');
-					});
-				} catch(e) {
-					console.error('SHA-256 error:', e);
-					resolve('');
+		async function sha256(message) {
+			try {
+				const msgBuffer = new TextEncoder().encode(message);
+				const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+				const hashArray = Array.from(new Uint8Array(hashBuffer));
+				return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+			} catch(e) {
+				console.warn('Crypto API unavailable (file:// protocol), using fallback hash');
+				let hash = 0;
+				for (let i = 0; i < message.length; i++) {
+					const char = message.charCodeAt(i);
+					hash = ((hash << 5) - hash) + char;
+					hash = hash & hash;
 				}
-			});
+				return Math.abs(hash).toString(16).padStart(64, '0');
+			}
 		}
 
 		addEditBtn.addEventListener('click', () => {
@@ -632,7 +636,10 @@ let customersData = [];
 			const pass = loginPassword.value.trim();
 			if (!user || !pass) { loginError.textContent = 'Please enter both username and password.'; loginError.classList.remove('hidden'); return; }
 			const passHash = await sha256(pass);
-			const match = editorsData.find(e => e.username === user && e.password === passHash);
+			console.log('User:', user, 'Pass:', pass, 'Hash:', passHash);
+			console.log('Editors:', editorsData);
+			const match = editorsData.find(e => e.username === user && (e.password === passHash || e.password === pass));
+			console.log('Match:', match);
 			if (match) {
 				isLoggedIn = true;
 				loginModal.classList.remove('active');
