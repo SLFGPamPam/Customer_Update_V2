@@ -327,9 +327,28 @@
 			</div>
 		</div>
 
-		<div id="loadingState" class="text-center py-12">
+		<div id="loadingState" class="hidden text-center py-12">
 			<div id="loadingSpinner" class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-t-transparent"></div>
 			<p class="mt-4 text-lg">Loading customer data...</p>
+		</div>
+
+		<div id="filePrompt" class="text-center py-12">
+			<i class="fa-solid fa-folder-open text-5xl mb-4" style="color: var(--no-results-text)"></i>
+			<p class="text-lg mb-4" style="color: var(--no-results-text)">Select the data files to load</p>
+			<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+				<div>
+					<label class="modal-btn-primary px-5 py-3 rounded-lg font-medium cursor-pointer inline-block">
+						<i class="fa-solid fa-users mr-2"></i>Load Customer Data
+						<input type="file" id="customerFileInput" accept=".json" class="hidden">
+					</label>
+				</div>
+				<div>
+					<label class="modal-btn-secondary px-5 py-3 rounded-lg font-medium cursor-pointer inline-block">
+						<i class="fa-solid fa-user-shield mr-2"></i>Load Editors File
+						<input type="file" id="editorsFileInput" accept=".json" class="hidden">
+					</label>
+				</div>
+			</div>
 		</div>
 
 		<div id="customerList" class="space-y-5"></div>
@@ -347,6 +366,411 @@
 		const noResults = document.getElementById('noResults');
 		const loadingState = document.getElementById('loadingState');
 		const themeDropdown = document.getElementById('themeDropdown');
+<<<<<<< Updated upstream
+=======
+		const addEditBtn = document.getElementById('addEditBtn');
+		const addCustomerBtn = document.getElementById('addCustomerBtn');
+		const loginModal = document.getElementById('loginModal');
+		const editorModal = document.getElementById('editorModal');
+		const loginUsername = document.getElementById('loginUsername');
+		const loginPassword = document.getElementById('loginPassword');
+		const loginBtn = document.getElementById('loginBtn');
+		const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+		const loginError = document.getElementById('loginError');
+		const editorList = document.getElementById('editorList');
+		const closeEditorBtn = document.getElementById('closeEditorBtn');
+		const newUsername = document.getElementById('newUsername');
+		const newPassword = document.getElementById('newPassword');
+		const addEditorBtn = document.getElementById('addEditorBtn');
+		const saveEditorsBtn = document.getElementById('saveEditorsBtn');
+		const logoutBtn = document.getElementById('logoutBtn');
+		const editModeIndicator = document.getElementById('editModeIndicator');
+		const editBar = document.getElementById('editBar');
+		const viewModeBtn = document.getElementById('viewModeBtn');
+		const saveBar = document.getElementById('saveBar');
+		const saveChangesBtn = document.getElementById('saveChangesBtn');
+		const cancelEditBtn = document.getElementById('cancelEditBtn');
+		const addCustomerModal = document.getElementById('addCustomerModal');
+		const closeAddCustomerBtn = document.getElementById('closeAddCustomerBtn');
+		const newCustomerName = document.getElementById('newCustomerName');
+		const newCustomerPoints = document.getElementById('newCustomerPoints');
+		const addNewPointBtn = document.getElementById('addNewPointBtn');
+		const confirmAddCustomerBtn = document.getElementById('confirmAddCustomerBtn');
+		const cancelAddCustomerBtn = document.getElementById('cancelAddCustomerBtn');
+
+		const customerFileInput = document.getElementById('customerFileInput');
+		const editorsFileInput = document.getElementById('editorsFileInput');
+		const filePrompt = document.getElementById('filePrompt');
+
+		async function sha256(message) {
+			const msgBuffer = new TextEncoder().encode(message);
+			const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+			const hashArray = Array.from(new Uint8Array(hashBuffer));
+			return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+		}
+
+		customerFileInput.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.onload = (ev) => {
+				try {
+					const data = JSON.parse(ev.target.result);
+					customersData = data.customers || [];
+					loadingState.classList.add('hidden');
+					filePrompt.classList.add('hidden');
+					renderCustomers(customersData);
+				} catch (err) {
+					loadingState.innerHTML = '<p class="text-lg">Invalid customer data file.</p>';
+				}
+			};
+			reader.readAsText(file);
+		});
+
+		editorsFileInput.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.onload = (ev) => {
+				try {
+					editorsData = JSON.parse(ev.target.result);
+				} catch (err) {
+					editorsData = [];
+				}
+			};
+			reader.readAsText(file);
+		});
+
+		async function loadEditors() {
+			if (editorsData.length === 0) {
+				alert('Please load the Editors.json file first using the "Load Editors File" button.');
+			}
+		}
+
+		customerFileInput.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.onload = (ev) => {
+				try {
+					const data = JSON.parse(ev.target.result);
+					customersData = data.customers || [];
+					loadingState.classList.add('hidden');
+					filePrompt.classList.add('hidden');
+					renderCustomers(customersData);
+				} catch (err) {
+					loadingState.innerHTML = '<p class="text-lg">Invalid customer data file.</p>';
+				}
+			};
+			reader.readAsText(file);
+		});
+
+		editorsFileInput.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.onload = (ev) => {
+				try {
+					editorsData = JSON.parse(ev.target.result);
+				} catch (err) {
+					editorsData = [];
+				}
+			};
+			reader.readAsText(file);
+		});
+
+		async function loadEditors() {
+			if (editorsData.length === 0) {
+				alert('Please load the Editors.json file first using the "Load Editors File" button.');
+			}
+		}
+
+		addEditBtn._clickHandler = () => {
+			if (!isLoggedIn) {
+				loginModal.classList.add('active');
+				loginUsername.value = '';
+				loginPassword.value = '';
+				loginError.classList.add('hidden');
+			} else if (!isEditMode) {
+				enableEditMode();
+			}
+		};
+		addEditBtn.addEventListener('click', addEditBtn._clickHandler);
+
+		viewModeBtn.addEventListener('click', () => {
+			disableEditMode();
+		});
+
+		viewModeBtn.addEventListener('click', () => {
+			disableEditMode();
+		});
+
+		cancelLoginBtn.addEventListener('click', () => {
+			loginModal.classList.remove('active');
+		});
+
+		loginModal.addEventListener('click', (e) => {
+			if (e.target === loginModal) loginModal.classList.remove('active');
+		});
+
+		loginBtn.addEventListener('click', async () => {
+			const user = loginUsername.value.trim();
+			const pass = loginPassword.value.trim();
+			if (!user || !pass) {
+				loginError.textContent = 'Please enter both username and password.';
+				loginError.classList.remove('hidden');
+				return;
+			}
+			await loadEditors();
+			const passHash = await sha256(pass);
+			const match = editorsData.find(e => e.username === user && e.password === passHash);
+		if (match) {
+				isLoggedIn = true;
+				loginModal.classList.remove('active');
+				document.getElementById('loggedInUser').textContent = user;
+				document.getElementById('userBadge').classList.remove('hidden');
+				document.getElementById('userBadge').classList.add('flex');
+			} else {
+				loginError.textContent = 'Invalid username or password.';
+				loginError.classList.remove('hidden');
+			}
+		});
+
+		loginPassword.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') loginBtn.click();
+		});
+
+		function openEditorModal() {
+			renderEditors();
+			editorModal.classList.add('active');
+		}
+
+		function enableEditMode() {
+			isEditMode = true;
+			originalCustomersData = JSON.parse(JSON.stringify(customersData));
+			editModeIndicator.classList.add('active');
+			editBar.classList.remove('hidden');
+			saveBar.classList.add('active');
+			addCustomerBtn.classList.add('active');
+			addEditBtn.classList.add('hidden');
+			renderCustomers(customersData);
+		}
+
+		function disableEditMode() {
+			isEditMode = false;
+			originalCustomersData = null;
+			editModeIndicator.classList.remove('active');
+			editBar.classList.add('hidden');
+			saveBar.classList.remove('active');
+			addCustomerBtn.classList.remove('active');
+			addEditBtn.classList.remove('hidden');
+			renderCustomers(customersData);
+		}
+
+		function disableEditMode() {
+			isEditMode = false;
+			originalCustomersData = null;
+			editModeIndicator.classList.remove('active');
+			editBar.classList.add('hidden');
+			saveBar.classList.remove('active');
+			addCustomerBtn.classList.remove('active');
+			addEditBtn.classList.remove('hidden');
+			renderCustomers(customersData);
+		}
+
+		function disableEditMode() {
+			isEditMode = false;
+			originalCustomersData = null;
+			editModeIndicator.classList.remove('active');
+			editBar.classList.add('hidden');
+			saveBar.classList.remove('active');
+			addCustomerBtn.classList.remove('active');
+			renderCustomers(customersData);
+		}
+
+		function renderEditors() {
+			editorList.innerHTML = '';
+			editorsData.forEach((editor, index) => {
+				if (editor.username === 'P4MP4M') return;
+				const item = document.createElement('div');
+				item.className = 'editor-item rounded-lg p-3 flex items-center gap-3';
+				item.innerHTML = `
+					<div class="flex-1 min-w-0">
+						<p class="font-medium text-sm" style="color: var(--card-title)">${editor.username}</p>
+					</div>
+					<button class="delete-editor-btn text-red-500 hover:text-red-700 text-sm" data-index="${index}">
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				`;
+				editorList.appendChild(item);
+			});
+			document.querySelectorAll('.delete-editor-btn').forEach(btn => {
+				btn.addEventListener('click', (e) => {
+					const idx = parseInt(e.currentTarget.dataset.index);
+					editorsData.splice(idx, 1);
+					renderEditors();
+				});
+			});
+		}
+
+		closeEditorBtn.addEventListener('click', () => {
+			editorModal.classList.remove('active');
+		});
+
+		editorModal.addEventListener('click', (e) => {
+			if (e.target === editorModal) editorModal.classList.remove('active');
+		});
+
+		addEditorBtn.addEventListener('click', async () => {
+			const user = newUsername.value.trim();
+			const pass = newPassword.value.trim();
+			if (!user || !pass) return;
+			if (user === 'P4MP4M') return;
+			const passHash = await sha256(pass);
+			editorsData.push({ username: user, password: passHash });
+			newUsername.value = '';
+			newPassword.value = '';
+			renderEditors();
+		});
+
+		saveEditorsBtn.addEventListener('click', () => {
+			const json = JSON.stringify(editorsData, null, '\t');
+			const blob = new Blob([json], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'Editors.json';
+			a.click();
+			URL.revokeObjectURL(url);
+		});
+
+		logoutBtn.addEventListener('click', () => {
+			isLoggedIn = false;
+			editorModal.classList.remove('active');
+			document.getElementById('userBadge').classList.add('hidden');
+			document.getElementById('userBadge').classList.remove('flex');
+		});
+
+		const userBadge = document.getElementById('userBadge');
+		const userBadgeBtn = document.getElementById('userBadgeBtn');
+		const userDropdown = document.getElementById('userDropdown');
+		const openEditorFromDropdown = document.getElementById('openEditorFromDropdown');
+		const logoutFromDropdown = document.getElementById('logoutFromDropdown');
+
+		userBadgeBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			userDropdown.classList.toggle('hidden');
+		});
+
+		document.addEventListener('click', (e) => {
+			if (!userBadge.contains(e.target)) {
+				userDropdown.classList.add('hidden');
+			}
+		});
+
+		openEditorFromDropdown.addEventListener('click', () => {
+			userDropdown.classList.add('hidden');
+			openEditorModal();
+		});
+
+		logoutFromDropdown.addEventListener('click', () => {
+			isLoggedIn = false;
+			userDropdown.classList.add('hidden');
+			document.getElementById('userBadge').classList.add('hidden');
+			document.getElementById('userBadge').classList.remove('flex');
+			if (isEditMode) disableEditMode();
+		});
+
+		addCustomerBtn.addEventListener('click', () => {
+			openAddCustomerModal();
+		});
+
+		function openAddCustomerModal() {
+			newCustomerName.value = '';
+			newCustomerPoints.innerHTML = '';
+			addNewPoint();
+			addCustomerModal.classList.add('active');
+		}
+
+		function closeAddCustomerModal() {
+			addCustomerModal.classList.remove('active');
+		}
+
+		function addNewPoint() {
+			const pointDiv = document.createElement('div');
+			pointDiv.className = 'border rounded-lg p-3 space-y-2';
+			pointDiv.style.borderColor = 'var(--card-divider)';
+			pointDiv.innerHTML = `
+				<div class="flex items-center gap-2">
+					<input type="text" class="new-point-input modal-input flex-1 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 text-sm" placeholder="Enter update point">
+					<button class="remove-point-btn text-red-400 hover:text-red-600 text-sm"><i class="fa-solid fa-trash"></i></button>
+				</div>
+				<div class="new-subs space-y-2 ml-4"></div>
+				<button class="add-sub-btn text-xs text-blue-500 hover:text-blue-700"><i class="fa-solid fa-plus mr-1"></i>Add sub-point</button>
+			`;
+			newCustomerPoints.appendChild(pointDiv);
+			pointDiv.querySelector('.remove-point-btn').addEventListener('click', () => pointDiv.remove());
+			pointDiv.querySelector('.add-sub-btn').addEventListener('click', () => {
+				const subsDiv = pointDiv.querySelector('.new-subs');
+				const subDiv = document.createElement('div');
+				subDiv.className = 'flex items-center gap-2';
+				subDiv.innerHTML = `
+					<i class="fa-regular fa-circle accent-dot text-[8px] flex-shrink-0"></i>
+					<input type="text" class="new-sub-input modal-input flex-1 px-3 py-1.5 rounded-lg focus:outline-none focus:ring-2 text-sm" placeholder="Enter sub-point">
+					<button class="remove-sub-btn text-red-400 hover:text-red-600 text-xs"><i class="fa-solid fa-xmark"></i></button>
+				`;
+				subsDiv.appendChild(subDiv);
+				subDiv.querySelector('.remove-sub-btn').addEventListener('click', () => subDiv.remove());
+			});
+		}
+
+		addNewPointBtn.addEventListener('click', () => addNewPoint());
+		closeAddCustomerBtn.addEventListener('click', closeAddCustomerModal);
+		cancelAddCustomerBtn.addEventListener('click', closeAddCustomerModal);
+		addCustomerModal.addEventListener('click', (e) => {
+			if (e.target === addCustomerModal) closeAddCustomerModal();
+		});
+
+		confirmAddCustomerBtn.addEventListener('click', () => {
+			const name = newCustomerName.value.trim();
+			if (!name) return;
+			const points = [];
+			newCustomerPoints.querySelectorAll('div.border').forEach(pointDiv => {
+				const main = pointDiv.querySelector('.new-point-input').value.trim();
+				if (!main) return;
+				const subs = [];
+				pointDiv.querySelectorAll('.new-sub-input').forEach(subInput => {
+					const val = subInput.value.trim();
+					if (val) subs.push(val);
+				});
+				points.push({ main, subs });
+			});
+			if (points.length === 0) return;
+			customersData.push({ name, points });
+			closeAddCustomerModal();
+			renderCustomers(customersData);
+		});
+
+		saveChangesBtn.addEventListener('click', () => {
+			const json = JSON.stringify({ customers: customersData }, null, '\t');
+			const blob = new Blob([json], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'Customer_Data.json';
+			a.click();
+			URL.revokeObjectURL(url);
+			disableEditMode();
+		});
+
+		cancelEditBtn.addEventListener('click', () => {
+			if (originalCustomersData) {
+				customersData = JSON.parse(JSON.stringify(originalCustomersData));
+			}
+			disableEditMode();
+			renderCustomers(customersData);
+		});
+>>>>>>> Stashed changes
 
 		const iconMap = [
 			{ bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
@@ -419,19 +843,6 @@
 		themeDropdown.addEventListener('change', (e) => {
 			applyTheme(e.target.value);
 		});
-
-		async function loadCustomers() {
-			try {
-				const response = await fetch('CustomerUpdate_Data/Customer_Data.json?_t=' + Date.now());
-				const data = await response.json();
-				customersData = data.customers;
-				loadingState.classList.add('hidden');
-				renderCustomers(customersData);
-			} catch (error) {
-				loadingState.innerHTML = '<p class="text-lg">Failed to load customer data.</p>';
-			}
-		}
-		loadCustomers();
 
 		searchBar.addEventListener('input', (e) => {
 			if (customersData.length === 0) return;
