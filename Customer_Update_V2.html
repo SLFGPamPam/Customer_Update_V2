@@ -166,7 +166,7 @@
 		.remove-btn:hover { opacity: 1; }
 	</style>
 </head>
-<body class="theme-verdant min-h-screen p-4 md:p-8">
+<body class="theme-midnight min-h-screen p-4 md:p-8">
 	<div class="fixed top-4 left-4 z-50">
 		<div id="userBadge" class="hidden relative">
 			<button id="userBadgeBtn" class="items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer transition-opacity hover:opacity-80" style="background: var(--dropdown-bg); color: var(--dropdown-text); border: 1px solid var(--dropdown-border); display: flex; align-items: center;">
@@ -529,6 +529,7 @@ const EDITORS_DATA = [
 	// Clear login session on page load
 	localStorage.removeItem('isLoggedIn');
 	localStorage.removeItem('loggedInUser');
+	localStorage.removeItem('selectedTheme');
 
 	// Icon map for customer cards - moved up to prevent TDZ error
 	const iconMap = [
@@ -656,8 +657,7 @@ const EDITORS_DATA = [
 				document.getElementById('loggedInUser').textContent = user;
 				userBadge.classList.remove('hidden');
 				userBadge.classList.add('flex');
-				localStorage.setItem('isLoggedIn', 'true');
-				localStorage.setItem('loggedInUser', user);
+				// Do NOT persist login session
 			} else {
 				loginError.textContent = 'Invalid username or password.';
 				loginError.classList.remove('hidden');
@@ -831,49 +831,49 @@ const EDITORS_DATA = [
 		
 		function exportCompleteHTML() {
 			saveData();
-			const currentHTML = document.documentElement.outerHTML;
-			
+			let currentHTML = document.documentElement.outerHTML;
+			// Force theme to 'midnight' in exported HTML
+			currentHTML = currentHTML.replace(/<body class=\"theme-\w+/, '<body class="theme-midnight');
+			// Remove any selectedTheme, isLoggedIn, loggedInUser from localStorage usage in exported HTML
+			currentHTML = currentHTML.replace(/localStorage\.setItem\(['"]selectedTheme['"],.*?\);?/g, '');
+			currentHTML = currentHTML.replace(/localStorage\.setItem\(['"]isLoggedIn['"],.*?\);?/g, '');
+			currentHTML = currentHTML.replace(/localStorage\.setItem\(['"]loggedInUser['"],.*?\);?/g, '');
+			currentHTML = currentHTML.replace(/localStorage\.getItem\(['"]selectedTheme['"]\)/g, 'null');
+			currentHTML = currentHTML.replace(/localStorage\.getItem\(['"]isLoggedIn['"]\)/g, 'null');
+			currentHTML = currentHTML.replace(/localStorage\.getItem\(['"]loggedInUser['"]\)/g, 'null');
+			// Update customer and editor data
 			const customerJson = JSON.stringify({ customers: customersData }, null, '\t');
 			const customerData = 'const CUSTOMER_DATA = ' + customerJson + ';';
-			
 			const editorsJson = JSON.stringify(editorsData, null, '\t');
 			const editorsDataStr = 'const EDITORS_DATA = ' + editorsJson + ';';
-			
 			let updatedHTML = currentHTML.replace(
 				/const CUSTOMER_DATA = \{[\s\S]*?\};/,
 				customerData
 			);
-			
 			updatedHTML = updatedHTML.replace(
 				/const EDITORS_DATA = \[[\s\S]*?\];/,
 				editorsDataStr
 			);
-			
 			updatedHTML = updatedHTML.replace(
-				/<div id="userBadge" class="[^"]*">/,
+				/<div id=\"userBadge\" class=\"[^\"]*\">/,
 				'<div id="userBadge" class="hidden relative">'
 			);
-			
 			updatedHTML = updatedHTML.replace(
-				/<div id="editModeIndicator" class="edit-mode-indicator active">/,
+				/<div id=\"editModeIndicator\" class=\"edit-mode-indicator active\">/,
 				'<div id="editModeIndicator" class="edit-mode-indicator">'
 			);
-			
 			updatedHTML = updatedHTML.replace(
-				/<div id="editBar" class="[^"]*">/,
+				/<div id=\"editBar\" class=\"[^\"]*\">/,
 				'<div id="editBar" class="fixed bottom-20 right-6 z-50">'
 			);
-			
 			updatedHTML = updatedHTML.replace(
-				/<div id="saveBar" class="[^"]*">/,
+				/<div id=\"saveBar\" class=\"[^\"]*\">/,
 				'<div id="saveBar">'
 			);
-			
 			updatedHTML = updatedHTML.replace(
-				/<button id="addCustomerBtn" class="[^"]*">/,
+				/<button id=\"addCustomerBtn\" class=\"[^\"]*\">/,
 				'<button id="addCustomerBtn" class="px-4 py-2 rounded-lg font-medium text-sm" style="background: var(--btn-bg); color: var(--btn-text);">'
 			);
-			
 			const blob = new Blob([updatedHTML], { type: 'text/html' });
 			const a = document.createElement('a'); 
 			a.href = URL.createObjectURL(blob); 
@@ -956,9 +956,9 @@ const EDITORS_DATA = [
 			} else if (el.dataset.point !== undefined) { customersData[cIdx].points[parseInt(el.dataset.point)].main = el.textContent.trim() || 'New point'; }
 		}
 
-		function applyTheme(theme) { document.body.className = document.body.className.replace(/theme-\w+/, 'theme-' + theme); localStorage.setItem('selectedTheme', theme); themeDropdown.value = theme; }
-		const savedTheme = localStorage.getItem('selectedTheme') || 'midnight';
-		applyTheme(savedTheme);
+		function applyTheme(theme) { document.body.className = document.body.className.replace(/theme-\w+/, 'theme-' + theme); themeDropdown.value = theme; }
+		// Always set theme to 'midnight' on load
+		applyTheme('midnight');
 		themeDropdown.addEventListener('change', (e) => { applyTheme(e.target.value); });
 
 		searchBar.addEventListener('input', (e) => {
