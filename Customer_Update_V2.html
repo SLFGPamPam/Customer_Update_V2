@@ -223,10 +223,14 @@
 		<button id="exportBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
 			<i class="fa-solid fa-download mr-2"></i>Export HTML File
 		</button>
-		<button id="cancelEditBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
-			<i class="fa-solid fa-xmark mr-2"></i>Cancel
-		</button>
-	</div>
+	<button id="importBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
+		<i class="fa-solid fa-upload mr-2"></i>Import JSON
+	</button>
+	<input type="file" id="importFileInput" accept=".json" style="display: none;">
+	<button id="cancelEditBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
+		<i class="fa-solid fa-xmark mr-2"></i>Cancel
+	</button>
+</div>
 
 	<div id="addCustomerModal" class="modal-overlay">
 		<div class="modal-box">
@@ -511,8 +515,8 @@ const EDITORS_DATA = [
 		"password": "f7806afa0e3d574213f00e9e9f9f7028ba5aeea5b57605509369c695b3c4ddea"
 	},
 	{
-		"username": "praveen",
-		"password": "praveen"
+		"username":"P4MP4M",
+		"password":"005717"
 	}
 ];
 
@@ -585,6 +589,8 @@ let customersData = [];
 		const saveBar = document.getElementById('saveBar');
 		const saveChangesBtn = document.getElementById('saveChangesBtn');
 		const exportBtn = document.getElementById('exportBtn');
+		const importBtn = document.getElementById('importBtn');
+		const importFileInput = document.getElementById('importFileInput');
 		const cancelEditBtn = document.getElementById('cancelEditBtn');
 		const addCustomerModal = document.getElementById('addCustomerModal');
 		const closeAddCustomerBtn = document.getElementById('closeAddCustomerBtn');
@@ -784,6 +790,32 @@ let customersData = [];
 		
 		exportEditorsBtn.addEventListener('click', () => {
 			exportCompleteHTML();
+		});
+		
+		importBtn.addEventListener('click', () => {
+			importFileInput.click();
+		});
+		
+		importFileInput.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.onload = (event) => {
+				try {
+					const data = JSON.parse(event.target.result);
+					if (data.customers && Array.isArray(data.customers)) {
+						customersData = data.customers;
+						renderCustomers(customersData);
+						alert('Imported ' + data.customers.length + ' customers successfully!');
+					} else {
+						alert('Invalid JSON format. Expected: { "customers": [...] }');
+					}
+				} catch(err) {
+					alert('Error parsing JSON: ' + err.message);
+				}
+			};
+			reader.readAsText(file);
+			importFileInput.value = '';
 		});
 		
 		function saveData() {
