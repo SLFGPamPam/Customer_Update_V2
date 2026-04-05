@@ -4,27 +4,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Customer Updates</title>
-	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="stylesheet" href="CustomerUpdate_Data/output.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&display=swap" rel="stylesheet">
-
-	<script>
-		tailwind.config = {
-			theme: {
-				extend: {
-					fontFamily: {
-						sans: ['Archivo', 'sans-serif']
-					},
-					transitionProperty: {
-						'height': 'height',
-						'spacing': 'margin, padding'
-					}
-				}
-			}
-		}
-	</script>
 	<style>
 		body {
 			font-family: 'Archivo', sans-serif;
@@ -234,7 +218,10 @@
 		</button>
 		<p class="text-sm"><i class="fa-solid fa-info-circle mr-1"></i>You have unsaved changes</p>
 		<button id="saveChangesBtn" class="modal-btn-primary px-5 py-2 rounded-lg font-medium text-sm">
-			<i class="fa-solid fa-download mr-2"></i>Save & Download
+			<i class="fa-solid fa-save mr-2"></i>Save
+		</button>
+		<button id="exportBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
+			<i class="fa-solid fa-download mr-2"></i>Export HTML File
 		</button>
 		<button id="cancelEditBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
 			<i class="fa-solid fa-xmark mr-2"></i>Cancel
@@ -309,7 +296,10 @@
 			</div>
 			<div class="flex gap-3 pt-4 mt-2" style="border-top: 1px solid var(--card-divider)">
 				<button id="saveEditorsBtn" class="modal-btn-primary px-5 py-2 rounded-lg font-medium flex-1">
-					<i class="fa-solid fa-download mr-2"></i>Download Updated File
+					<i class="fa-solid fa-save mr-2"></i>Save
+				</button>
+				<button id="exportEditorsBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium flex-1">
+					<i class="fa-solid fa-download mr-2"></i>Export HTML File
 				</button>
 				<button id="logoutBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium flex-1">
 					<i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
@@ -344,27 +334,229 @@
 		</p>
 	</div>
 
-	<script src="CustomerUpdate_Data/Customer_Data.js" onerror="console.error('Failed to load Customer_Data.js')"></script>
-	<script src="CustomerUpdate_Data/Editors.js" onerror="console.error('Failed to load Editors.js')"></script>
 	<script>
-		let customersData = [];
-		let editorsData = [];
-		let isLoggedIn = false;
-		let isEditMode = false;
-		let originalCustomersData = null;
+const CUSTOMER_DATA = {
+  "customers": [
+    {
+      "name": "Customer Name",
+      "points": [
+        {
+          "main": "Main point",
+          "subs": [
+            "Sub point"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Acme Corporation",
+      "points": [
+        {
+          "main": "Upgraded to premium subscription plan",
+          "subs": [
+            "Annual billing activated",
+            "Priority support enabled"
+          ]
+        },
+        {
+          "main": "Added 5 new team members to account",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "GlobalTech Industries",
+      "points": [
+        {
+          "main": "Requested custom API integration",
+          "subs": [
+            "Documentation sent to development team",
+            "Onboarding call scheduled for next week"
+          ]
+        },
+        {
+          "main": "Payment method updated to corporate card",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "Summit Enterprises",
+      "points": [
+        {
+          "main": "Renewed annual contract early",
+          "subs": [
+            "10% loyalty discount applied",
+            "Extended support hours included"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bright Solutions Ltd",
+      "points": [
+        {
+          "main": "Reported issue with dashboard loading times",
+          "subs": [
+            "Escalated to engineering team",
+            "Temporary workaround provided"
+          ]
+        },
+        {
+          "main": "Requested additional data export features",
+          "subs": [
+            "Feature request logged for Q2 roadmap"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pinnacle Group",
+      "points": [
+        {
+          "main": "Completed onboarding process",
+          "subs": [
+            "All team members trained successfully",
+            "Welcome package delivered"
+          ]
+        },
+        {
+          "main": "Upgraded storage plan to 500GB",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "Nexus Innovations",
+      "points": [
+        {
+          "main": "Requested demo for new product features",
+          "subs": [
+            "Demo scheduled with account manager",
+            "Custom use case prepared for presentation"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vertex Dynamics",
+      "points": [
+        {
+          "main": "Downgraded to basic plan",
+          "subs": [
+            "Reason: Budget constraints",
+            "Re-engagement campaign initiated"
+          ]
+        },
+        {
+          "main": "Exported all historical data before downgrade",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "Horizon Partners",
+      "points": [
+        {
+          "main": "Referred 3 new clients this quarter",
+          "subs": [
+            "Referral bonus credits applied",
+            "Thank you gift sent"
+          ]
+        },
+        {
+          "main": "Interested in white-label solution",
+          "subs": [
+            "Sales team preparing proposal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Catalyst Systems",
+      "points": [
+        {
+          "main": "Integration with third-party CRM completed",
+          "subs": [
+            "Data sync verified and working",
+            "Training session held for admin users"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Apex Ventures",
+      "points": [
+        {
+          "main": "Account flagged for unusual login activity",
+          "subs": [
+            "Security review completed",
+            "Two-factor authentication enforced"
+          ]
+        },
+        {
+          "main": "Requested additional user roles and permissions",
+          "subs": [
+            "Custom role configuration in progress"
+          ]
+        }
+      ]
+    }
+  ]
+};
 
-		try {
-			if (typeof CUSTOMER_DATA !== 'undefined') { customersData = CUSTOMER_DATA.customers || []; }
-			if (typeof EDITORS_DATA !== 'undefined') { editorsData = EDITORS_DATA; }
-		} catch(e) { console.error('Error loading data:', e); }
-		loadingState.classList.add('hidden');
-		if (customersData.length > 0) { renderCustomers(customersData); }
-		else { console.warn('No customer data loaded. CUSTOMER_DATA is:', typeof CUSTOMER_DATA); }
+const EDITORS_DATA = [
+	{
+		"username": "P4MP4M",
+		"password": "f7806afa0e3d574213f00e9e9f9f7028ba5aeea5b57605509369c695b3c4ddea"
+	}
+];
 
-		const searchBar = document.getElementById('searchBar');
-		const customerList = document.getElementById('customerList');
-		const noResults = document.getElementById('noResults');
-		const loadingState = document.getElementById('loadingState');
+let customersData = [];
+	let editorsData = [];
+	let isLoggedIn = false;
+	let isEditMode = false;
+	let originalCustomersData = null;
+
+	// Icon map for customer cards - moved up to prevent TDZ error
+	const iconMap = [
+		{ bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
+		{ bg: 'bg-purple-100', icon: 'fa-building', color: 'text-purple-600' },
+		{ bg: 'bg-emerald-100', icon: 'fa-briefcase', color: 'text-emerald-600' },
+		{ bg: 'bg-orange-100', icon: 'fa-rocket', color: 'text-orange-600' },
+		{ bg: 'bg-pink-100', icon: 'fa-star', color: 'text-pink-600' },
+		{ bg: 'bg-cyan-100', icon: 'fa-globe', color: 'text-cyan-600' },
+		{ bg: 'bg-indigo-100', icon: 'fa-chart-line', color: 'text-indigo-600' },
+		{ bg: 'bg-teal-100', icon: 'fa-shield-halved', color: 'text-teal-600' },
+		{ bg: 'bg-amber-100', icon: 'fa-handshake', color: 'text-amber-600' },
+		{ bg: 'bg-rose-100', icon: 'fa-gear', color: 'text-rose-600' },
+		{ bg: 'bg-violet-100', icon: 'fa-bolt', color: 'text-violet-600' }
+	];
+
+	const loadingState = document.getElementById('loadingState');
+	const searchBar = document.getElementById('searchBar');
+	const customerList = document.getElementById('customerList');
+	const noResults = document.getElementById('noResults');
+
+	try {
+		const savedCustomers = localStorage.getItem('customerData');
+		const savedEditors = localStorage.getItem('editorData');
+		
+		if (savedCustomers) {
+			customersData = JSON.parse(savedCustomers);
+		} else if (typeof CUSTOMER_DATA !== 'undefined') {
+			customersData = CUSTOMER_DATA.customers || [];
+		}
+		
+		if (savedEditors) {
+			editorsData = JSON.parse(savedEditors);
+		} else if (typeof EDITORS_DATA !== 'undefined') {
+			editorsData = EDITORS_DATA;
+		}
+	} catch(e) { console.error('Error loading data:', e); }
+	loadingState.classList.add('hidden');
+	if (customersData.length > 0) { renderCustomers(customersData); }
+	else { console.warn('No customer data loaded. CUSTOMER_DATA is:', typeof CUSTOMER_DATA); }
 		const themeDropdown = document.getElementById('themeDropdown');
 		const addEditBtn = document.getElementById('addEditBtn');
 		const addCustomerBtn = document.getElementById('addCustomerBtn');
@@ -381,12 +573,14 @@
 		const newPassword = document.getElementById('newPassword');
 		const addEditorBtn = document.getElementById('addEditorBtn');
 		const saveEditorsBtn = document.getElementById('saveEditorsBtn');
+		const exportEditorsBtn = document.getElementById('exportEditorsBtn');
 		const logoutBtn = document.getElementById('logoutBtn');
 		const editModeIndicator = document.getElementById('editModeIndicator');
 		const editBar = document.getElementById('editBar');
 		const viewModeBtn = document.getElementById('viewModeBtn');
 		const saveBar = document.getElementById('saveBar');
 		const saveChangesBtn = document.getElementById('saveChangesBtn');
+		const exportBtn = document.getElementById('exportBtn');
 		const cancelEditBtn = document.getElementById('cancelEditBtn');
 		const addCustomerModal = document.getElementById('addCustomerModal');
 		const closeAddCustomerBtn = document.getElementById('closeAddCustomerBtn');
@@ -407,11 +601,6 @@
 			const hashArray = Array.from(new Uint8Array(hashBuffer));
 			return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 		}
-
-		if (typeof CUSTOMER_DATA !== 'undefined') { customersData = CUSTOMER_DATA.customers || []; }
-		if (typeof EDITORS_DATA !== 'undefined') { editorsData = EDITORS_DATA; }
-		loadingState.classList.add('hidden');
-		if (customersData.length > 0) renderCustomers(customersData);
 
 		addEditBtn.addEventListener('click', () => {
 			if (!isLoggedIn) {
@@ -566,13 +755,52 @@
 		});
 
 		saveChangesBtn.addEventListener('click', () => {
-			const json = JSON.stringify({ customers: customersData }, null, '\t');
-			const content = 'const CUSTOMER_DATA = ' + json + ';';
-			const blob = new Blob([content], { type: 'application/javascript' });
-			const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Customer_Data.js'; a.click();
+			saveData();
 			disableEditMode();
 		});
 
+		saveEditorsBtn.addEventListener('click', () => {
+			saveData();
+			editorModal.classList.remove('active');
+		});
+		
+		exportEditorsBtn.addEventListener('click', () => {
+			exportCompleteHTML();
+		});
+		
+		function saveData() {
+			localStorage.setItem('customerData', JSON.stringify(customersData));
+			localStorage.setItem('editorData', JSON.stringify(editorsData));
+		}
+		
+		function exportCompleteHTML() {
+			saveData();
+			const currentHTML = document.documentElement.outerHTML;
+			
+			const customerJson = JSON.stringify({ customers: customersData }, null, '\t');
+			const customerData = 'const CUSTOMER_DATA = ' + customerJson + ';';
+			
+			const editorsJson = JSON.stringify(editorsData, null, '\t');
+			const editorsDataStr = 'const EDITORS_DATA = ' + editorsJson + ';';
+			
+			let updatedHTML = currentHTML.replace(
+				/const CUSTOMER_DATA = \{[\s\S]*?\};/,
+				customerData
+			);
+			
+			updatedHTML = updatedHTML.replace(
+				/const EDITORS_DATA = \[[\s\S]*?\];/,
+				editorsDataStr
+			);
+			
+			const blob = new Blob([updatedHTML], { type: 'text/html' });
+			const a = document.createElement('a'); 
+			a.href = URL.createObjectURL(blob); 
+			a.download = 'Customer_Update_V2.html'; 
+			a.click();
+		}
+
+		exportBtn.addEventListener('click', () => { exportCompleteHTML(); });
 		cancelEditBtn.addEventListener('click', () => { if (originalCustomersData) customersData = JSON.parse(JSON.stringify(originalCustomersData)); disableEditMode(); renderCustomers(customersData); });
 
 		const iconMap = [
