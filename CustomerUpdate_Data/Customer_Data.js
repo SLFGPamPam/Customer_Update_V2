@@ -1,0 +1,169 @@
+const CUSTOMER_DATA = {
+  "customers": [
+    {
+      "name": "Customer Name",
+      "points": [
+        {
+          "main": "Main point",
+          "subs": [
+            "Sub point"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Acme Corporation",
+      "points": [
+        {
+          "main": "Upgraded to premium subscription plan",
+          "subs": [
+            "Annual billing activated",
+            "Priority support enabled"
+          ]
+        },
+        {
+          "main": "Added 5 new team members to account",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "GlobalTech Industries",
+      "points": [
+        {
+          "main": "Requested custom API integration",
+          "subs": [
+            "Documentation sent to development team",
+            "Onboarding call scheduled for next week"
+          ]
+        },
+        {
+          "main": "Payment method updated to corporate card",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "Summit Enterprises",
+      "points": [
+        {
+          "main": "Renewed annual contract early",
+          "subs": [
+            "10% loyalty discount applied",
+            "Extended support hours included"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bright Solutions Ltd",
+      "points": [
+        {
+          "main": "Reported issue with dashboard loading times",
+          "subs": [
+            "Escalated to engineering team",
+            "Temporary workaround provided"
+          ]
+        },
+        {
+          "main": "Requested additional data export features",
+          "subs": [
+            "Feature request logged for Q2 roadmap"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pinnacle Group",
+      "points": [
+        {
+          "main": "Completed onboarding process",
+          "subs": [
+            "All team members trained successfully",
+            "Welcome package delivered"
+          ]
+        },
+        {
+          "main": "Upgraded storage plan to 500GB",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "Nexus Innovations",
+      "points": [
+        {
+          "main": "Requested demo for new product features",
+          "subs": [
+            "Demo scheduled with account manager",
+            "Custom use case prepared for presentation"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vertex Dynamics",
+      "points": [
+        {
+          "main": "Downgraded to basic plan",
+          "subs": [
+            "Reason: Budget constraints",
+            "Re-engagement campaign initiated"
+          ]
+        },
+        {
+          "main": "Exported all historical data before downgrade",
+          "subs": []
+        }
+      ]
+    },
+    {
+      "name": "Horizon Partners",
+      "points": [
+        {
+          "main": "Referred 3 new clients this quarter",
+          "subs": [
+            "Referral bonus credits applied",
+            "Thank you gift sent"
+          ]
+        },
+        {
+          "main": "Interested in white-label solution",
+          "subs": [
+            "Sales team preparing proposal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Catalyst Systems",
+      "points": [
+        {
+          "main": "Integration with third-party CRM completed",
+          "subs": [
+            "Data sync verified and working",
+            "Training session held for admin users"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Apex Ventures",
+      "points": [
+        {
+          "main": "Account flagged for unusual login activity",
+          "subs": [
+            "Security review completed",
+            "Two-factor authentication enforced"
+          ]
+        },
+        {
+          "main": "Requested additional user roles and permissions",
+          "subs": [
+            "Custom role configuration in progress"
+          ]
+        }
+      ]
+    }
+  ]
+};

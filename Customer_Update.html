@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Customer Updates</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&display=swap" rel="stylesheet">
+
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					fontFamily: {
+						sans: ['Archivo', 'sans-serif']
+					},
+					transitionProperty: {
+						'height': 'height',
+						'spacing': 'margin, padding'
+					}
+				}
+			}
+		}
+	</script>
+	<style>
+		body {
+			font-family: 'Archivo', sans-serif;
+			font-optical-sizing: auto;
+			font-variation-settings: "wdth" 100;
+		}
+
+		.theme-verdant {
+			--bg-gradient-from: #059669;
+			--bg-gradient-to: #047857;
+			--title-text: #ffffff;
+			--subtitle-text: #d1fae5;
+			--card-bg: #f9fafb;
+			--card-hover-bg: #ffffff;
+			--card-text: #374151;
+			--card-title: #1f2937;
+			--card-border: #f3f4f6;
+			--card-divider: #e5e7eb;
+			--sub-text: #6b7280;
+			--accent: #22c55e;
+			--search-bg: #ffffff;
+			--search-text: #374151;
+			--search-placeholder: #9ca3af;
+			--search-border: transparent;
+			--search-ring: #34d399;
+			--search-icon: #9ca3af;
+			--loading-text: rgba(255,255,255,0.8);
+			--loading-spinner: #ffffff;
+			--no-results-text: rgba(255,255,255,0.7);
+			--dropdown-bg: rgba(255,255,255,0.15);
+			--dropdown-text: #ffffff;
+			--dropdown-hover: rgba(255,255,255,0.25);
+			--dropdown-border: rgba(255,255,255,0.2);
+			--dropdown-option-bg: #1f2937;
+			--dropdown-option-text: #e5e7eb;
+			--dropdown-option-hover: #374151;
+		}
+
+		.theme-paperbound {
+			--bg-gradient-from: #faf9f6;
+			--bg-gradient-to: #f5f0e8;
+			--title-text: #2c2c2c;
+			--subtitle-text: #6b6b6b;
+			--card-bg: #ffffff;
+			--card-hover-bg: #fefefe;
+			--card-text: #3a3a3a;
+			--card-title: #1a1a1a;
+			--card-border: #c5bfb0;
+			--card-divider: #c5bfb0;
+			--sub-text: #7a7a7a;
+			--accent: #b8860b;
+			--search-bg: #ffffff;
+			--search-text: #2c2c2c;
+			--search-placeholder: #a0a0a0;
+			--search-border: #a89f8d;
+			--search-ring: #b8860b;
+			--search-icon: #a0a0a0;
+			--loading-text: #6b6b6b;
+			--loading-spinner: #b8860b;
+			--no-results-text: #8a8a8a;
+			--dropdown-bg: rgba(0,0,0,0.05);
+			--dropdown-text: #2c2c2c;
+			--dropdown-hover: rgba(0,0,0,0.1);
+			--dropdown-border: rgba(0,0,0,0.1);
+			--dropdown-option-bg: #ffffff;
+			--dropdown-option-text: #2c2c2c;
+			--dropdown-option-hover: #f5f0e8;
+		}
+
+		.theme-midnight {
+			--bg-gradient-from: #1a252f;
+			--bg-gradient-to: #2c3e50;
+			--title-text: #ecf0f1;
+			--subtitle-text: #95a5a6;
+			--card-bg: #34495e;
+			--card-hover-bg: #3d566e;
+			--card-text: #bdc3c7;
+			--card-title: #ecf0f1;
+			--card-border: #2c3e50;
+			--card-divider: #2c3e50;
+			--sub-text: #95a5a6;
+			--accent: #3498db;
+			--search-bg: #34495e;
+			--search-text: #ecf0f1;
+			--search-placeholder: #7f8c8d;
+			--search-border: #2c3e50;
+			--search-ring: #3498db;
+			--search-icon: #7f8c8d;
+			--loading-text: rgba(236,240,241,0.8);
+			--loading-spinner: #3498db;
+			--no-results-text: rgba(189,195,199,0.7);
+			--dropdown-bg: rgba(0,0,0,0.2);
+			--dropdown-text: #ecf0f1;
+			--dropdown-hover: rgba(0,0,0,0.3);
+			--dropdown-border: rgba(255,255,255,0.1);
+			--dropdown-option-bg: #2c3e50;
+			--dropdown-option-text: #ecf0f1;
+			--dropdown-option-hover: #34495e;
+		}
+
+		.theme-stone {
+			--bg-gradient-from: #6b6b6b;
+			--bg-gradient-to: #7e7e7e;
+			--title-text: #ffffff;
+			--subtitle-text: #e0e0e0;
+			--card-bg: #f0f0f0;
+			--card-hover-bg: #f5f5f5;
+			--card-text: #4a4a4a;
+			--card-title: #2a2a2a;
+			--card-border: #d5d5d5;
+			--card-divider: #d5d5d5;
+			--sub-text: #6a6a6a;
+			--accent: #888888;
+			--search-bg: #ffffff;
+			--search-text: #3a3a3a;
+			--search-placeholder: #999999;
+			--search-border: #d0d0d0;
+			--search-ring: #888888;
+			--search-icon: #999999;
+			--loading-text: rgba(255,255,255,0.8);
+			--loading-spinner: #ffffff;
+			--no-results-text: rgba(255,255,255,0.7);
+			--dropdown-bg: rgba(0,0,0,0.15);
+			--dropdown-text: #ffffff;
+			--dropdown-hover: rgba(0,0,0,0.25);
+			--dropdown-border: rgba(255,255,255,0.2);
+			--dropdown-option-bg: #4a4a4a;
+			--dropdown-option-text: #e0e0e0;
+			--dropdown-option-hover: #5a5a5a;
+		}
+
+		.theme-sunset {
+			--bg-gradient-from: #d4846a;
+			--bg-gradient-to: #e9967a;
+			--title-text: #ffffff;
+			--subtitle-text: #fce4d6;
+			--card-bg: #fdf6f0;
+			--card-hover-bg: #ffffff;
+			--card-text: #5a3e2b;
+			--card-title: #3d2517;
+			--card-border: #f0d5c4;
+			--card-divider: #f0d5c4;
+			--sub-text: #8a6a55;
+			--accent: #e07040;
+			--search-bg: #ffffff;
+			--search-text: #5a3e2b;
+			--search-placeholder: #b89a88;
+			--search-border: #e8c4b0;
+			--search-ring: #e07040;
+			--search-icon: #b89a88;
+			--loading-text: rgba(255,255,255,0.85);
+			--loading-spinner: #ffffff;
+			--no-results-text: rgba(255,255,255,0.75);
+			--dropdown-bg: rgba(0,0,0,0.1);
+			--dropdown-text: #ffffff;
+			--dropdown-hover: rgba(0,0,0,0.2);
+			--dropdown-border: rgba(255,255,255,0.2);
+			--dropdown-option-bg: #5a3e2b;
+			--dropdown-option-text: #fce4d6;
+			--dropdown-option-hover: #6a4e3b;
+		}
+
+		.theme-oceanic {
+			--bg-gradient-from: #4a657a;
+			--bg-gradient-to: #5D7B93;
+			--title-text: #ffffff;
+			--subtitle-text: #dce6f0;
+			--card-bg: #e8eef3;
+			--card-hover-bg: #ffffff;
+			--card-text: #3e5266;
+			--card-title: #2c3e50;
+			--card-border: #b8c8d8;
+			--card-divider: #b8c8d8;
+			--sub-text: #6b8299;
+			--accent: #3b82b8;
+			--search-bg: #ffffff;
+			--search-text: #2c3e50;
+			--search-placeholder: #8fa3b8;
+			--search-border: #b0c4d8;
+			--search-ring: #5D7B93;
+			--search-icon: #8fa3b8;
+			--loading-text: rgba(255,255,255,0.8);
+			--loading-spinner: #ffffff;
+			--no-results-text: rgba(255,255,255,0.7);
+			--dropdown-bg: rgba(0,0,0,0.1);
+			--dropdown-text: #ffffff;
+			--dropdown-hover: rgba(0,0,0,0.2);
+			--dropdown-border: rgba(255,255,255,0.2);
+			--dropdown-option-bg: #2c3e50;
+			--dropdown-option-text: #e0e0e0;
+			--dropdown-option-hover: #3e5266;
+		}
+
+		.theme-twilight {
+			--bg-gradient-from: #2a1d3d;
+			--bg-gradient-to: #3D2B56;
+			--title-text: #f3e8ff;
+			--subtitle-text: #d8b4fe;
+			--card-bg: #ffffff;
+			--card-hover-bg: #fdfbff;
+			--card-text: #4a3b69;
+			--card-title: #2e1a47;
+			--card-border: #c4b5fd;
+			--card-divider: #ddd6fe;
+			--sub-text: #6b5b8a;
+			--accent: #a855f7;
+			--search-bg: #ffffff;
+			--search-text: #2e1a47;
+			--search-placeholder: #a78bfa;
+			--search-border: #c4b5fd;
+			--search-ring: #a855f7;
+			--search-icon: #a78bfa;
+			--loading-text: rgba(243,232,255,0.8);
+			--loading-spinner: #ffffff;
+			--no-results-text: rgba(243,232,255,0.7);
+			--dropdown-bg: rgba(0,0,0,0.2);
+			--dropdown-text: #ffffff;
+			--dropdown-hover: rgba(0,0,0,0.3);
+			--dropdown-border: rgba(255,255,255,0.2);
+			--dropdown-option-bg: #2e1a47;
+			--dropdown-option-text: #e9d5ff;
+			--dropdown-option-hover: #4a3b69;
+		}
+
+		body {
+			background: linear-gradient(to bottom, var(--bg-gradient-from), var(--bg-gradient-to));
+			transition: background 0.5s ease;
+		}
+
+		#titleText { color: var(--title-text); }
+		#subtitleText { color: var(--subtitle-text); }
+		#searchBar {
+			background: var(--search-bg);
+			color: var(--search-text);
+			border: 1px solid var(--search-border);
+		}
+		#searchBar::placeholder { color: var(--search-placeholder); }
+		#searchBar:focus { border-color: var(--search-ring); }
+		#searchIcon { color: var(--search-icon); }
+		#loadingState p { color: var(--loading-text); }
+		#loadingSpinner { border-color: var(--loading-spinner); border-top-color: transparent; }
+		#noResults { color: var(--no-results-text); }
+
+		.customer-card {
+			background: var(--card-bg);
+			border: 1px solid var(--card-border);
+			transition: all 0.3s ease;
+		}
+		.customer-card:hover {
+			background: var(--card-hover-bg);
+		}
+		.card-title { color: var(--card-title); }
+		.card-text { color: var(--card-text); }
+		.card-sub { color: var(--sub-text); }
+		.card-divider { border-color: var(--card-divider); }
+		.accent-dot { color: var(--accent); }
+
+		#themeDropdown {
+			background: var(--dropdown-bg);
+			color: var(--dropdown-text);
+			border-color: var(--dropdown-border);
+		}
+		#themeDropdown option {
+			background: var(--dropdown-option-bg);
+			color: var(--dropdown-option-text);
+		}
+	</style>
+</head>
+<body class="theme-verdant min-h-screen p-4 md:p-8">
+	<div class="fixed top-4 right-4 z-50">
+		<select id="themeDropdown" class="px-3 py-2 rounded-lg text-sm cursor-pointer focus:outline-none transition-all duration-300 hover:opacity-80">
+			<option value="verdant">Verdant Flow</option>
+			<option value="paperbound">Paperbound</option>
+			<option value="midnight">Midnight Archive</option>
+			<option value="stone">Stone Silence</option>
+			<option value="sunset">Sunset Clay</option>
+			<option value="oceanic">Oceanic Calm</option>
+			<option value="twilight">Twilight Velvet</option>
+		</select>
+	</div>
+	<div class="max-w-5xl mx-auto text-base">
+		<div class="text-center mb-8">
+			<h1 id="titleText" class="text-5xl font-bold mb-2">
+				<i class="fa-solid fa-users mr-2"></i>Customer Updates
+			</h1>
+			<p id="subtitleText" class="text-lg">Stay informed with the latest customer information</p>
+		</div>
+
+		<div class="mb-6">
+			<div class="relative">
+				<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+					<i id="searchIcon" class="fa-solid fa-magnifying-glass text-lg"></i>
+				</div>
+				<input
+					type="text"
+					id="searchBar"
+					placeholder="Search customers or updates..."
+					class="w-full pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:ring-2 shadow-sm transition-all duration-300 hover:shadow-md focus:shadow-md text-lg"
+				>
+			</div>
+		</div>
+
+		<div id="loadingState" class="text-center py-12">
+			<div id="loadingSpinner" class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-t-transparent"></div>
+			<p class="mt-4 text-lg">Loading customer data...</p>
+		</div>
+
+		<div id="customerList" class="space-y-5"></div>
+		<p id="noResults" class="text-center hidden py-12 text-lg">
+			<i class="fa-solid fa-user-slash text-4xl mb-3 block"></i>
+			No customers found matching your search.
+		</p>
+	</div>
+
+	<script>
+		let customersData = [];
+
+		const searchBar = document.getElementById('searchBar');
+		const customerList = document.getElementById('customerList');
+		const noResults = document.getElementById('noResults');
+		const loadingState = document.getElementById('loadingState');
+		const themeDropdown = document.getElementById('themeDropdown');
+
+		const iconMap = [
+			{ bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
+			{ bg: 'bg-purple-100', icon: 'fa-building', color: 'text-purple-600' },
+			{ bg: 'bg-emerald-100', icon: 'fa-briefcase', color: 'text-emerald-600' },
+			{ bg: 'bg-orange-100', icon: 'fa-rocket', color: 'text-orange-600' },
+			{ bg: 'bg-pink-100', icon: 'fa-star', color: 'text-pink-600' },
+			{ bg: 'bg-cyan-100', icon: 'fa-globe', color: 'text-cyan-600' },
+			{ bg: 'bg-indigo-100', icon: 'fa-chart-line', color: 'text-indigo-600' },
+			{ bg: 'bg-teal-100', icon: 'fa-shield-halved', color: 'text-teal-600' },
+			{ bg: 'bg-amber-100', icon: 'fa-handshake', color: 'text-amber-600' },
+			{ bg: 'bg-rose-100', icon: 'fa-gear', color: 'text-rose-600' },
+			{ bg: 'bg-violet-100', icon: 'fa-bolt', color: 'text-violet-600' }
+		];
+
+		function renderCustomers(filteredCustomers) {
+			customerList.innerHTML = '';
+
+			if (filteredCustomers.length === 0) {
+				noResults.classList.remove('hidden');
+			} else {
+				noResults.classList.add('hidden');
+				filteredCustomers.forEach((customer, index) => {
+					const card = document.createElement('div');
+					card.className = 'customer-card rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 cursor-default';
+
+					const iconConfig = iconMap[index % iconMap.length];
+
+					let pointsHTML = '';
+					customer.points.forEach((point, idx) => {
+						let subsHTML = '';
+						if (point.subs.length > 0) {
+							subsHTML = '<ul class="ml-8 mt-2 space-y-2">';
+							point.subs.forEach(sub => {
+								subsHTML += `<li class="card-sub text-base flex items-start"><i class="fa-regular fa-circle accent-dot text-[8px] mt-2 mr-2.5 flex-shrink-0"></i><span>${sub}</span></li>`;
+							});
+							subsHTML += '</ul>';
+						}
+						pointsHTML += `
+							<div class="${idx > 0 ? 'mt-4 pt-4 card-divider border-t' : ''}">
+								<p class="card-text text-base flex items-start"><i class="fa-solid fa-circle accent-dot text-[8px] mt-2 mr-3 flex-shrink-0"></i><span>${point.main}</span></p>
+								${subsHTML}
+							</div>
+						`;
+					});
+
+					card.innerHTML = `
+						<div class="flex items-center gap-4 mb-4 pb-4 card-divider border-b">
+							<div class="w-12 h-12 rounded-lg ${iconConfig.bg} flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-110 hover:rotate-3">
+								<i class="fa-solid ${iconConfig.icon} ${iconConfig.color} text-lg transition-transform duration-300"></i>
+							</div>
+							<h2 class="card-title text-lg font-semibold transition-colors duration-300">${customer.name}</h2>
+						</div>
+						${pointsHTML}
+					`;
+					customerList.appendChild(card);
+				});
+			}
+		}
+
+		function applyTheme(theme) {
+			document.body.className = document.body.className.replace(/theme-\w+/, 'theme-' + theme);
+			localStorage.setItem('selectedTheme', theme);
+			themeDropdown.value = theme;
+		}
+
+		const savedTheme = localStorage.getItem('selectedTheme') || 'verdant';
+		applyTheme(savedTheme);
+
+		themeDropdown.addEventListener('change', (e) => {
+			applyTheme(e.target.value);
+		});
+
+		async function loadCustomers() {
+			try {
+				const response = await fetch('CustomerUpdate_Data/Customer_Data.json?_t=' + Date.now());
+				const data = await response.json();
+				customersData = data.customers;
+				loadingState.classList.add('hidden');
+				renderCustomers(customersData);
+			} catch (error) {
+				loadingState.innerHTML = '<p class="text-lg">Failed to load customer data.</p>';
+			}
+		}
+		loadCustomers();
+
+		searchBar.addEventListener('input', (e) => {
+			if (customersData.length === 0) return;
+			const query = e.target.value.trim().toLowerCase();
+			if (!query) {
+				renderCustomers(customersData);
+				return;
+			}
+			const queryWords = query.split(/\s+/);
+			const filtered = customersData.filter(customer => {
+				const nameLower = customer.name.toLowerCase();
+				const pointsText = customer.points.map(p => p.main + ' ' + p.subs.join(' ')).join(' ').toLowerCase();
+				return queryWords.every(word => nameLower.includes(word) || pointsText.includes(word));
+			});
+			renderCustomers(filtered);
+		});
+	</script>
+</body>
+</html>
