@@ -100,8 +100,40 @@
 			--dropdown-option-bg: #2e1a47; --dropdown-option-text: #e9d5ff; --dropdown-option-hover: #4a3b69;
 			--btn-bg: #a855f7; --btn-hover: #9333ea; --btn-text: #ffffff;
 		}
+		.theme-batman {
+			--bg-gradient-from: #000000; --bg-gradient-to: #1a1a1a;
+			--title-text: #ffffff; --subtitle-text: #b3b3b3;
+			--card-bg: #0f0f0f; --card-hover-bg: #171717; --card-text: #e0e0e0; --card-title: #ffffff;
+			--card-border: #262626; --card-divider: #262626; --sub-text: #737373; --accent: #facc15;
+			--search-bg: #0a0a0a; --search-text: #ffffff; --search-placeholder: #525252;
+			--search-border: #262626; --search-ring: #facc15; --search-icon: #525252;
+			--loading-text: rgba(255,255,255,0.7); --loading-spinner: #facc15; --no-results-text: rgba(255,255,255,0.6);
+			--dropdown-bg: rgba(255,255,255,0.05); --dropdown-text: #ffffff; --dropdown-hover: rgba(255,255,255,0.1); --dropdown-border: rgba(255,255,255,0.1);
+			--dropdown-option-bg: #1a1a1a; --dropdown-option-text: #e0e0e0; --dropdown-option-hover: #262626;
+			--btn-bg: #facc15; --btn-hover: #eab308; --btn-text: #000000;
+		}
 
-		body { background: linear-gradient(to bottom, var(--bg-gradient-from), var(--bg-gradient-to)); transition: background 0.5s ease; }
+		body { background: linear-gradient(to bottom, var(--bg-gradient-from), var(--bg-gradient-to)); transition: background 0.5s ease; position: relative; }
+
+		/* Batman background logo */
+		.batman-background-logo {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 80vw;
+			height: 80vw;
+			max-width: 800px;
+			max-height: 800px;
+			opacity: 0.04;
+			z-index: 0;
+			pointer-events: none;
+			display: none;
+		}
+
+		.theme-batman .batman-background-logo {
+			display: block;
+		}
 		#titleText { color: var(--title-text); }
 		#subtitleText { color: var(--subtitle-text); }
 		#searchBar { background: var(--search-bg); color: var(--search-text); border: 1px solid var(--search-border); }
@@ -122,6 +154,11 @@
 		#themeDropdown option { background: var(--dropdown-option-bg); color: var(--dropdown-option-text); }
 		#addEditBtn { background: var(--btn-bg); color: var(--btn-text); transition: all 0.3s ease; }
 		#addEditBtn:hover { background: var(--btn-hover); }
+		
+		.customer-icon-container {
+			background-color: color-mix(in srgb, var(--accent) 15%, transparent);
+			color: var(--accent);
+		}
 
 		.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
 		.modal-overlay.active { display: flex; }
@@ -167,6 +204,10 @@
 	</style>
 </head>
 <body class="theme-midnight min-h-screen p-4 md:p-8">
+	<!-- Batman background logo -->
+	<svg class="batman-background-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" fill="#facc15">
+		<path d="M 25 9 C 18.18208 9 12.014509 10.704877 7.4824219 13.539062 C 2.950335 16.37325 1.1842379e-15 20.420281 0 25 C 0 29.579719 2.950335 33.62675 7.4824219 36.460938 C 12.014509 39.295124 18.18208 41 25 41 C 31.81792 41 37.985491 39.295124 42.517578 36.460938 C 47.049665 33.62675 50 29.579719 50 25 C 50 20.465041 47.050143 16.424446 42.519531 13.578125 C 37.988919 10.731804 31.820426 9 25 9 z M 25 11 C 31.479574 11 37.31069 12.667805 41.455078 15.271484 C 45.599466 17.875163 48 21.334959 48 25 C 48 28.720281 45.599944 32.172859 41.457031 34.763672 C 37.314118 37.354485 31.48208 39 25 39 C 18.51792 39 12.685882 37.354485 8.5429688 34.763672 C 4.4000555 32.172859 2 28.720281 2 25 C 2 21.279719 4.4000555 17.827141 8.5429688 15.236328 C 12.685882 12.645515 18.51792 11 25 11 z M 22.099609 14.5 L 21.5 20.400391 C 20.1 26.300391 12 21.6 17 15 C 9.9 16.6 5.1 20.600781 5 24.800781 C 5.1 26.700781 6.2 28.700391 8 30.400391 C 9.3 31.600391 11 33.2 13 34 C 9.7 29.2 16.1 26.8 19 32 C 20.1 27.8 23.9 30.7 25 36 C 26.1 30.7 29.9 27.8 31 32 C 33.9 26.8 40.3 29.2 37 34 C 39 33.2 40.7 31.6 42 30.5 C 43.8 28.8 44.9 26.800391 45 24.900391 C 44.9 20.700391 40.1 16.7 33 15 C 38 21.6 29.9 26.200391 28.5 20.400391 L 27.900391 14.5 L 26.5 16 L 25 16 L 23.5 16 L 22.099609 14.5 z"></path>
+	</svg>
 	<div class="fixed top-4 left-4 z-50">
 		<div id="userBadge" class="hidden relative">
 			<button id="userBadgeBtn" class="items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer transition-opacity hover:opacity-80" style="background: var(--dropdown-bg); color: var(--dropdown-text); border: 1px solid var(--dropdown-border); display: flex; align-items: center;">
@@ -193,6 +234,7 @@
 			<option value="sunset">Sunset Clay</option>
 			<option value="oceanic">Oceanic Calm</option>
 			<option value="twilight">Twilight Velvet</option>
+			<option value="batman">Batman</option>
 		</select>
 	</div>
 	<div class="fixed bottom-6 right-6 z-50">
@@ -552,17 +594,17 @@ const EDITORS_DATA = [
 
 	// Icon map for customer cards - moved up to prevent TDZ error
 	const iconMap = [
-		{ bg: 'bg-blue-100', icon: 'fa-user', color: 'text-blue-600' },
-		{ bg: 'bg-purple-100', icon: 'fa-building', color: 'text-purple-600' },
-		{ bg: 'bg-emerald-100', icon: 'fa-briefcase', color: 'text-emerald-600' },
-		{ bg: 'bg-orange-100', icon: 'fa-rocket', color: 'text-orange-600' },
-		{ bg: 'bg-pink-100', icon: 'fa-star', color: 'text-pink-600' },
-		{ bg: 'bg-cyan-100', icon: 'fa-globe', color: 'text-cyan-600' },
-		{ bg: 'bg-indigo-100', icon: 'fa-chart-line', color: 'text-indigo-600' },
-		{ bg: 'bg-teal-100', icon: 'fa-shield-halved', color: 'text-teal-600' },
-		{ bg: 'bg-amber-100', icon: 'fa-handshake', color: 'text-amber-600' },
-		{ bg: 'bg-rose-100', icon: 'fa-gear', color: 'text-rose-600' },
-		{ bg: 'bg-violet-100', icon: 'fa-bolt', color: 'text-violet-600' }
+		'fa-user',
+		'fa-building',
+		'fa-briefcase',
+		'fa-rocket',
+		'fa-star',
+		'fa-globe',
+		'fa-chart-line',
+		'fa-shield-halved',
+		'fa-handshake',
+		'fa-gear',
+		'fa-bolt'
 	];
 
 	const loadingState = document.getElementById('loadingState');
@@ -949,7 +991,7 @@ const EDITORS_DATA = [
 						}
 						pointsHTML += `<div class="${idx > 0 ? 'mt-4 pt-4 card-divider border-t' : ''}"><p class="card-text text-base flex items-start gap-2 group"><i class="fa-solid fa-circle accent-dot text-[8px] mt-2 flex-shrink-0"></i><span class="flex-1 ${isEditMode ? 'editable-text' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-point="${idx}"` : ''}>${isEditMode ? point.main : `<span>${point.main}</span>`}</span>${isEditMode ? `<i class="fa-solid fa-xmark remove-btn text-red-400 text-xs mt-1" data-customer="${realIndex}" data-point="${idx}" data-sub="remove-point" title="Remove point"></i>` : ''}</p>${subsHTML}${isEditMode ? `<button class="add-sub-btn text-xs mt-2 ml-8 text-blue-500 hover:text-blue-700" data-customer="${realIndex}" data-point="${idx}"><i class="fa-solid fa-plus mr-1"></i>Add sub-point</button>` : ''}</div>`;
 					});
-					card.innerHTML = `<div class="flex items-center gap-4 mb-4 pb-4 card-divider border-b relative"><div class="w-12 h-12 rounded-lg ${iconConfig.bg} flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-110 hover:rotate-3"><i class="fa-solid ${iconConfig.icon} ${iconConfig.color} text-lg transition-transform duration-300"></i></div><h2 class="card-title text-lg font-semibold transition-colors duration-300 ${isEditMode ? 'edit-name' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-field="name"` : ''}>${customer.name}</h2>${isEditMode ? `<button class="delete-customer-btn text-red-400 hover:text-red-600 text-sm" data-customer="${realIndex}" title="Delete customer"><i class="fa-solid fa-trash"></i></button>` : ''}</div>${pointsHTML}${isEditMode ? `<button class="add-point-btn text-xs mt-3 text-blue-500 hover:text-blue-700" data-customer="${realIndex}"><i class="fa-solid fa-plus mr-1"></i>Add point</button>` : ''}`;
+					card.innerHTML = `<div class="flex items-center gap-4 mb-4 pb-4 card-divider border-b relative"><div class="w-12 h-12 rounded-lg customer-icon-container flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-110 hover:rotate-3"><i class="fa-solid ${iconConfig} text-lg transition-transform duration-300"></i></div><h2 class="card-title text-lg font-semibold transition-colors duration-300 ${isEditMode ? 'edit-name' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-field="name"` : ''}>${customer.name}</h2>${isEditMode ? `<button class="delete-customer-btn text-red-400 hover:text-red-600 text-sm" data-customer="${realIndex}" title="Delete customer"><i class="fa-solid fa-trash"></i></button>` : ''}</div>${pointsHTML}${isEditMode ? `<button class="add-point-btn text-xs mt-3 text-blue-500 hover:text-blue-700" data-customer="${realIndex}"><i class="fa-solid fa-plus mr-1"></i>Add point</button>` : ''}`;
 					customerList.appendChild(card);
 				});
 			}
