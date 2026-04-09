@@ -206,9 +206,13 @@
 		<span>Edit Mode Active</span>
 	</div>
 
-	<div id="editBar" class="fixed bottom-20 right-6 z-50">
+
+	<div id="editBar" class="fixed bottom-20 right-6 z-50 flex gap-3">
 		<button id="viewModeBtn" class="px-5 py-3 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 font-medium" style="background: var(--btn-bg); color: var(--btn-text);">
 			<i class="fa-solid fa-eye mr-2"></i>View
+		</button>
+		<button id="deleteAllBtn" class="px-5 py-3 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 font-medium modal-btn-danger" style="background: #ef4444; color: #fff;">
+			<i class="fa-solid fa-trash mr-2"></i>Delete All
 		</button>
 	</div>
 
@@ -223,14 +227,17 @@
 		<button id="exportBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
 			<i class="fa-solid fa-download mr-2"></i>Export HTML File
 		</button>
-	<button id="importBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
-		<i class="fa-solid fa-upload mr-2"></i>Import JSON
-	</button>
-	<input type="file" id="importFileInput" accept=".json" style="display: none;">
-	<button id="cancelEditBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
-		<i class="fa-solid fa-xmark mr-2"></i>Cancel
-	</button>
-</div>
+		<button id="exportJsonBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
+			<i class="fa-solid fa-file-export mr-2"></i>Export JSON
+		</button>
+		<button id="importBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
+			<i class="fa-solid fa-upload mr-2"></i>Import JSON
+		</button>
+		<input type="file" id="importFileInput" accept=".json" style="display: none;">
+		<button id="cancelEditBtn" class="modal-btn-secondary px-5 py-2 rounded-lg font-medium text-sm">
+			<i class="fa-solid fa-xmark mr-2"></i>Cancel
+		</button>
+	</div>
 
 	<div id="addCustomerModal" class="modal-overlay">
 		<div class="modal-box">
@@ -339,6 +346,16 @@
 	</div>
 
 	<script>
+		// Delete All button logic
+		const deleteAllBtn = document.getElementById('deleteAllBtn');
+		if (deleteAllBtn) {
+			deleteAllBtn.addEventListener('click', () => {
+				if (confirm('Are you sure you want to delete ALL customer data? This cannot be undone.')) {
+					customersData = [];
+					renderCustomers(customersData);
+				}
+			});
+		}
 const CUSTOMER_DATA = {
   "customers": [
     {
@@ -893,6 +910,19 @@ const EDITORS_DATA = [
 		}
 
 		exportBtn.addEventListener('click', () => { exportCompleteHTML(); });
+		// Export JSON button logic
+		const exportJsonBtn = document.getElementById('exportJsonBtn');
+		if (exportJsonBtn) {
+			exportJsonBtn.addEventListener('click', () => {
+				const data = { customers: customersData };
+				const jsonStr = JSON.stringify(data, null, 2);
+				const blob = new Blob([jsonStr], { type: 'application/json' });
+				const a = document.createElement('a');
+				a.href = URL.createObjectURL(blob);
+				a.download = 'Customer_Data.json';
+				a.click();
+			});
+		}
 		cancelEditBtn.addEventListener('click', () => { if (originalCustomersData) customersData = JSON.parse(JSON.stringify(originalCustomersData)); disableEditMode(); renderCustomers(customersData); });
 
 		function renderCustomers(filteredCustomers) {
