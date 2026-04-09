@@ -874,11 +874,16 @@ const EDITORS_DATA = [
 				/<button id=\"addCustomerBtn\" class=\"[^\"]*\">/,
 				'<button id="addCustomerBtn" class="px-4 py-2 rounded-lg font-medium text-sm" style="background: var(--btn-bg); color: var(--btn-text);">'
 			);
-			// Ensure Add/Edit button is always present and visible in export
-			updatedHTML = updatedHTML.replace(
-				/<button id=\"addEditBtn\" class=\"([^\"]*)hidden([^\"]*)\"/,
-				'<button id="addEditBtn" class="$1$2"'
-			);
+			   // Ensure Add/Edit button is always present and visible in export
+			   updatedHTML = updatedHTML.replace(
+				   /<button id=\"addEditBtn\" class=\"([^\"]*)hidden([^\"]*)\"/,
+				   '<button id="addEditBtn" class="$1$2"'
+			   );
+			   // Ensure Editor Manager modal is closed in export
+			   updatedHTML = updatedHTML.replace(
+				   /<div id=\"editorModal\" class=\"modal-overlay active\"/,
+				   '<div id="editorModal" class="modal-overlay"'
+			   );
 			const blob = new Blob([updatedHTML], { type: 'text/html' });
 			const a = document.createElement('a'); 
 			a.href = URL.createObjectURL(blob); 
