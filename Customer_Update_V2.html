@@ -521,10 +521,12 @@ const EDITORS_DATA = [
 ];
 
 		let customersData = [];
-	let editorsData = [];
-	let isLoggedIn = false;
-	let isEditMode = false;
-	let originalCustomersData = null;
+		let editorsData = [];
+		let isLoggedIn = false;
+		let isEditMode = false;
+		let originalCustomersData = null;
+		let currentSearchQuery = '';
+		let currentFilteredCustomers = [];
 
 	// Clear login session on page load
 	localStorage.removeItem('isLoggedIn');
@@ -554,13 +556,11 @@ const EDITORS_DATA = [
 	try {
 		const savedCustomers = localStorage.getItem('customerData');
 		const savedEditors = localStorage.getItem('editorData');
-		
 		if (savedCustomers) {
 			customersData = JSON.parse(savedCustomers);
 		} else if (typeof CUSTOMER_DATA !== 'undefined') {
 			customersData = CUSTOMER_DATA.customers || [];
 		}
-		
 		if (savedEditors) {
 			editorsData = JSON.parse(savedEditors);
 		} else if (typeof EDITORS_DATA !== 'undefined') {
@@ -568,6 +568,7 @@ const EDITORS_DATA = [
 		}
 	} catch(e) { console.error('Error loading data:', e); }
 	loadingState.classList.add('hidden');
+	currentFilteredCustomers = customersData;
 	if (customersData.length > 0) { renderCustomers(customersData); }
 	else { console.warn('No customer data loaded. CUSTOMER_DATA is:', typeof CUSTOMER_DATA); }
 		const themeDropdown = document.getElementById('themeDropdown');
@@ -895,6 +896,7 @@ const EDITORS_DATA = [
 		cancelEditBtn.addEventListener('click', () => { if (originalCustomersData) customersData = JSON.parse(JSON.stringify(originalCustomersData)); disableEditMode(); renderCustomers(customersData); });
 
 		function renderCustomers(filteredCustomers) {
+			currentFilteredCustomers = filteredCustomers;
 			customerList.innerHTML = '';
 			if (filteredCustomers.length === 0) {
 				noResults.classList.remove('hidden');
@@ -923,7 +925,7 @@ const EDITORS_DATA = [
 			}
 			if (isEditMode) {
 				customerList.querySelectorAll('.editable-text, .edit-name').forEach(el => { el.addEventListener('blur', handleEdit); });
-				customerList.querySelectorAll('.delete-customer-btn').forEach(btn => { btn.addEventListener('click', (e) => { customersData.splice(parseInt(e.currentTarget.dataset.customer), 1); renderCustomers(customersData); }); });
+				customerList.querySelectorAll('.delete-customer-btn').forEach(btn => { btn.addEventListener('click', (e) => { customersData.splice(parseInt(e.currentTarget.dataset.customer), 1); reapplySearch(); }); });
 				customerList.querySelectorAll('.remove-btn').forEach(btn => {
 					btn.addEventListener('click', (e) => {
 						const cIdx = parseInt(e.currentTarget.dataset.customer);
@@ -931,14 +933,14 @@ const EDITORS_DATA = [
 						const sIdx = e.currentTarget.dataset.sub;
 						if (sIdx === 'remove-point') { customersData[cIdx].points.splice(pIdx, 1); }
 						else if (sIdx !== 'new') { customersData[cIdx].points[pIdx].subs.splice(parseInt(sIdx), 1); }
-						renderCustomers(customersData);
+						reapplySearch();
 					});
 				});
 				customerList.querySelectorAll('.add-point-btn').forEach(btn => {
 					btn.addEventListener('click', (e) => {
 						const idx = parseInt(e.currentTarget.dataset.customer);
 						customersData[idx].points.push({ main: '', subs: [] });
-						renderCustomers(customersData);
+						reapplySearch();
 						setTimeout(() => { const np = customerList.querySelector(`[data-customer="${idx}"][data-point="${customersData[idx].points.length - 1}"]:not([data-sub])`); if (np) np.focus(); }, 50);
 					});
 				});
@@ -947,7 +949,7 @@ const EDITORS_DATA = [
 						const cIdx = parseInt(e.currentTarget.dataset.customer);
 						const pIdx = parseInt(e.currentTarget.dataset.point);
 						customersData[cIdx].points[pIdx].subs.push('');
-						renderCustomers(customersData);
+						reapplySearch();
 						setTimeout(() => { const ns = customerList.querySelector(`[data-customer="${cIdx}"][data-point="${pIdx}"][data-sub="${customersData[cIdx].points[pIdx].subs.length - 1}"]`); if (ns) ns.focus(); }, 50);
 					});
 				});
@@ -961,9 +963,25 @@ const EDITORS_DATA = [
 			else if (el.dataset.sub !== undefined) {
 				const pIdx = parseInt(el.dataset.point);
 				const sIdx = el.dataset.sub;
-				if (sIdx === 'new') { const val = el.textContent.trim(); if (val) { customersData[cIdx].points[pIdx].subs.push(val); } renderCustomers(customersData); return; }
-				else { const sIdxNum = parseInt(sIdx); const val = el.textContent.trim(); if (!val) { customersData[cIdx].points[pIdx].subs.splice(sIdxNum, 1); renderCustomers(customersData); return; } customersData[cIdx].points[pIdx].subs[sIdxNum] = val; }
+				if (sIdx === 'new') { const val = el.textContent.trim(); if (val) { customersData[cIdx].points[pIdx].subs.push(val); } reapplySearch(); return; }
+				else { const sIdxNum = parseInt(sIdx); const val = el.textContent.trim(); if (!val) { customersData[cIdx].points[pIdx].subs.splice(sIdxNum, 1); reapplySearch(); return; } customersData[cIdx].points[pIdx].subs[sIdxNum] = val; }
 			} else if (el.dataset.point !== undefined) { customersData[cIdx].points[parseInt(el.dataset.point)].main = el.textContent.trim() || 'New point'; }
+			reapplySearch();
+		}
+
+		function reapplySearch() {
+			if (!currentSearchQuery) {
+				renderCustomers(customersData);
+				return;
+			}
+			const query = currentSearchQuery.trim().toLowerCase();
+			const queryWords = query.split(/\s+/);
+			const filtered = customersData.filter(customer => {
+				const nameLower = customer.name.toLowerCase();
+				const pointsText = customer.points.map(p => p.main + ' ' + p.subs.join(' ')).join(' ').toLowerCase();
+				return queryWords.every(word => nameLower.includes(word) || pointsText.includes(word));
+			});
+			renderCustomers(filtered);
 		}
 
 		function applyTheme(theme) { document.body.className = document.body.className.replace(/theme-\w+/, 'theme-' + theme); themeDropdown.value = theme; }
@@ -973,8 +991,12 @@ const EDITORS_DATA = [
 
 		searchBar.addEventListener('input', (e) => {
 			if (customersData.length === 0) return;
-			const query = e.target.value.trim().toLowerCase();
-			if (!query) { renderCustomers(customersData); return; }
+			currentSearchQuery = e.target.value;
+			if (!currentSearchQuery.trim()) {
+				renderCustomers(customersData);
+				return;
+			}
+			const query = currentSearchQuery.trim().toLowerCase();
 			const queryWords = query.split(/\s+/);
 			const filtered = customersData.filter(customer => {
 				const nameLower = customer.name.toLowerCase();

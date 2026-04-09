@@ -187,5 +187,131 @@
         }
       ]
     }
+    ,
+  
+    {
+      "name": "Orion Solutions",
+      "points": [
+        {"main": "Signed new annual contract", "subs": ["Onboarding scheduled", "Account manager assigned"]},
+        {"main": "Requested integration with ERP", "subs": ["Technical review in progress"]}
+      ]
+    },
+    {
+      "name": "BluePeak Analytics",
+      "points": [
+        {"main": "Renewed premium support plan", "subs": ["24/7 hotline enabled"]}
+      ]
+    },
+    {
+      "name": "Quantum Dynamics",
+      "points": [
+        {"main": "Reported API latency issue", "subs": ["Issue escalated to dev team"]},
+        {"main": "Added 3 new users", "subs": []}
+      ]
+    },
+    {
+      "name": "Evergreen Holdings",
+      "points": [
+        {"main": "Requested invoice for Q1", "subs": ["Finance team notified"]}
+      ]
+    },
+    {
+      "name": "NovaTech Partners",
+      "points": [
+        {"main": "Completed migration to v2 platform", "subs": ["All data verified"]},
+        {"main": "Requested training session", "subs": ["Session scheduled for next week"]}
+      ]
+    },
+    {
+      "name": "SummitEdge Group",
+      "points": [
+        {"main": "Enabled SSO for all users", "subs": ["Security audit passed"]}
+      ]
+    },
+    {
+      "name": "Crestline Ventures",
+      "points": [
+        {"main": "Requested custom dashboard", "subs": ["Design mockups sent"]}
+      ]
+    },
+    {
+      "name": "Atlas Innovations",
+      "points": [
+        {"main": "Added 10 new team members", "subs": ["Bulk invite processed"]}
+      ]
+    },
+    {
+      "name": "Zenith Labs",
+      "points": [
+        {"main": "Reported billing discrepancy", "subs": ["Refund issued"]}
+      ]
+    },
+    {
+      "name": "Pioneer Digital",
+      "points": [
+        {"main": "Requested feature enhancement", "subs": ["Added to roadmap"]}
+      ]
+    },
+
+    {
+      "name": "Customer 391",
+      "points": [
+        {"main": "Requested quarterly report", "subs": ["Report sent via email"]}
+      ]
+    },
+    {
+      "name": "Customer 392",
+      "points": [
+        {"main": "Updated contact information", "subs": ["Phone and email updated"]}
+      ]
+    },
+    {
+      "name": "Customer 393",
+      "points": [
+        {"main": "Added new billing address", "subs": ["Address verified"]}
+      ]
+    },
+    {
+      "name": "Customer 394",
+      "points": [
+        {"main": "Requested product demo", "subs": ["Demo scheduled for Friday"]}
+      ]
+    },
+    {
+      "name": "Customer 395",
+      "points": [
+        {"main": "Renewed contract for 2 years", "subs": ["Discount applied"]}
+      ]
+    },
+    {
+      "name": "Customer 396",
+      "points": [
+        {"main": "Reported login issue", "subs": ["Password reset sent"]}
+      ]
+    },
+    {
+      "name": "Customer 397",
+      "points": [
+        {"main": "Requested API access", "subs": ["API key generated"]}
+      ]
+    },
+    {
+      "name": "Customer 398",
+      "points": [
+        {"main": "Added 5 new users", "subs": ["Welcome emails sent"]}
+      ]
+    },
+    {
+      "name": "Customer 399",
+      "points": [
+        {"main": "Requested integration with CRM", "subs": ["Integration in progress"]}
+      ]
+    },
+    {
+      "name": "Customer 400",
+      "points": [
+        {"main": "Completed onboarding", "subs": ["All users trained"]}
+      ]
+    }
   ]
 }
