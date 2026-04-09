@@ -908,17 +908,9 @@ const EDITORS_DATA = [
 					const iconConfig = iconMap[index % iconMap.length];
 					const realIndex = customersData.indexOf(customer);
 					let pointsHTML = '';
-					customer.points.forEach((point, idx) => {
-						let subsHTML = '';
-						if (point.subs.length > 0) {
-							subsHTML = '<ul class="ml-8 mt-2 space-y-2">';
-							point.subs.forEach((sub, subIdx) => {
-								subsHTML += `<li class="card-sub text-base flex items-start gap-2 group"><i class="fa-regular fa-circle accent-dot text-[8px] mt-2 flex-shrink-0"></i><span class="flex-1 ${isEditMode ? 'editable-text' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-point="${idx}" data-sub="${subIdx}"` : ''}>${isEditMode ? sub : `<span>${sub}</span>`}</span>${isEditMode ? `<i class="fa-solid fa-xmark remove-btn text-red-400 text-xs mt-1" data-customer="${realIndex}" data-point="${idx}" data-sub="${subIdx}" title="Remove"></i>` : ''}</li>`;
-							});
-							subsHTML += '</ul>';
-						}
-						pointsHTML += `<div class="${idx > 0 ? 'mt-4 pt-4 card-divider border-t' : ''}"><p class="card-text text-base flex items-start gap-2 group"><i class="fa-solid fa-circle accent-dot text-[8px] mt-2 flex-shrink-0"></i><span class="flex-1 ${isEditMode ? 'editable-text' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-point="${idx}" data-sub="new"` : ''}>${isEditMode ? point.main : `<span>${point.main}</span>`}</span>${isEditMode ? `<i class="fa-solid fa-xmark remove-btn text-red-400 text-xs mt-1" data-customer="${realIndex}" data-point="${idx}" data-sub="remove-point" title="Remove point"></i>` : ''}</p>${subsHTML}${isEditMode ? `<button class="add-sub-btn text-xs mt-2 ml-8 text-blue-500 hover:text-blue-700" data-customer="${realIndex}" data-point="${idx}"><i class="fa-solid fa-plus mr-1"></i>Add sub-point</button>` : ''}</div>`;
+						pointsHTML += `<div class="${idx > 0 ? 'mt-4 pt-4 card-divider border-t' : ''}"><p class="card-text text-base flex items-start gap-2 group"><i class="fa-solid fa-circle accent-dot text-[8px] mt-2 flex-shrink-0"></i><span class="flex-1 ${isEditMode ? 'editable-text' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-point="${idx}"` : ''}>${isEditMode ? point.main : `<span>${point.main}</span>`}</span>${isEditMode ? `<i class="fa-solid fa-xmark remove-btn text-red-400 text-xs mt-1" data-customer="${realIndex}" data-point="${idx}" data-sub="remove-point" title="Remove point"></i>` : ''}</p>${subsHTML}${isEditMode ? `<button class="add-sub-btn text-xs mt-2 ml-8 text-blue-500 hover:text-blue-700" data-customer="${realIndex}" data-point="${idx}"><i class="fa-solid fa-plus mr-1"></i>Add sub-point</button>` : ''}</div>`;
 					});
+					customer.points.forEach((point, idx) => {
 					card.innerHTML = `<div class="flex items-center gap-4 mb-4 pb-4 card-divider border-b relative"><div class="w-12 h-12 rounded-lg ${iconConfig.bg} flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-110 hover:rotate-3"><i class="fa-solid ${iconConfig.icon} ${iconConfig.color} text-lg transition-transform duration-300"></i></div><h2 class="card-title text-lg font-semibold transition-colors duration-300 ${isEditMode ? 'edit-name' : ''}" ${isEditMode ? `contenteditable="true" data-customer="${realIndex}" data-field="name"` : ''}>${customer.name}</h2>${isEditMode ? `<button class="delete-customer-btn text-red-400 hover:text-red-600 text-sm" data-customer="${realIndex}" title="Delete customer"><i class="fa-solid fa-trash"></i></button>` : ''}</div>${pointsHTML}${isEditMode ? `<button class="add-point-btn text-xs mt-3 text-blue-500 hover:text-blue-700" data-customer="${realIndex}"><i class="fa-solid fa-plus mr-1"></i>Add point</button>` : ''}`;
 					customerList.appendChild(card);
 				});
